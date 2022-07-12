@@ -1,0 +1,21 @@
+
+
+.table{
+    position: absolute;
+    background-color: aqua;
+    width: unset !important;
+}
+
+.paridade{
+    background-color: chartreuse;
+}
+.paridadecerta{
+    background-color: green;
+}
+.paridadeerrada{
+    background-color: red;
+}
+
+.letraDif{
+    color: white;
+}

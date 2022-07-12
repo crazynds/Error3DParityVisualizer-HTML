@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="main.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	</head>
+	<body>
+        <script src="https://unpkg.com/vue@3"></script>
+
+        <div id="app">
+			{{message}}
+			<button type="button" class="btn btn-primary" @click="preparematriz">Prepare a matriz</button>
+			<button type="button" class="btn btn-info" v-if="matriz!=null" @click="sendMatriz(matrizParity)">Envia Matriz</button>
+			<br>
+			<button type="button" class="btn btn-info" @click="updateShow(-1)">Left</button>
+			<button type="button" class="btn btn-info" @click="updateShow(1)">Rigth</button><br>
+
+			<div class="row">
+
+				<div class="col-4 position-relative" v-if="matriz!=null">
+					<h2>Matriz de dados original</h2>
+					<template v-for="(quadra,z) of matriz">
+						<table v-if="z<show_z" class="table" :style="{left: 50+z*15+'px', top: 50+z*10+'px'}">
+							<tr v-for="(linha,l) of quadra">
+								<td v-for="(item,c) of linha" :class="(((z==0?0:z/z) + (l==0?0:l/l)+(c==0?0:c/c))<=1)?'paridade':''">
+									{{item}}
+								</td>
+							</tr>
+						</table>
+					</template>
+				</div>
+				<div class="col-4 position-relative" v-if="matrizParity!=null">
+					<h2>Matriz com bits de paridade</h2>
+					<template v-for="(quadra,z) of matrizParity">
+						<table v-if="z<show_z" class="table" :style="{left: 50+z*15+'px', top: 50+z*10+'px'}">
+							<tr v-for="(linha,l) of quadra">
+								<td v-for="(item,c) of linha" :class="((z==0?0:z/z) + (l==0?0:l/l)+(c==0?0:c/c)<=1)?'paridade':''">
+									{{item}}
+								</td>
+							</tr>
+						</table>
+					</template>
+				</div>
+				<div class="col-4 position-relative" v-if="matriz_recebida!=null">
+					<h2>Matriz recebida <h5>{{ (canCorrige(matriz_recebida)? '' : '!Não Recuperavel!')}}</h5></h2>
+					<template v-for="(quadra,z) of matriz_recebida">
+						<table v-if="z<show_z" class="table" :style="{left: 50+z*15+'px', top: 100+z*10+'px'}">
+							<tr v-for="(linha,l) of quadra">
+								<td v-for="(item,c) of linha" :class="((z==0?0:z/z) + (l==0?0:l/l)+(c==0?0:c/c)<=1)?('paridade '+(checkParity(matriz_recebida,z,l,c)?'paridadecerta':'paridadeerrada')):''">
+									<span :class="(item!=matrizParity[z][l][c])?' letraDif':''">
+										{{item}}
+									</span>
+								</td>
+							</tr>
+						</table>
+					</template>
+				</div>
+			</div>
+		</div>
+
+        <script src="index.js"></script>
+	</body>
+</html>
